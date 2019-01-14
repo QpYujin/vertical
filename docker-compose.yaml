@@ -49,14 +49,6 @@ services:
       
   compute:
     image: 921992833788.dkr.ecr.us-west-2.amazonaws.com/compute:8.23.2.1
-    ports:
-      - "10000-10999:10000-10999"
-      - "11000-11999:11000-11999"
-      - "13400-13401:13400-13401"
-      - "30000-30010:30000-30010"
-      - "31531:31531"
-      - "31538:31538"
-      - "544:544"
     privileged: true
     hostname: is-compute-1
     volumes:
