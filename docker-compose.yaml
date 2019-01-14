@@ -62,5 +62,7 @@ services:
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
       - /data0:/data0
-    depends_on:
+    extra_hosts::
       - "is-en-conductor-0.en-cond:172.18.0.4"
+    depends_on:
+      - conductor
