@@ -1,0 +1,66 @@
+version: "3"
+services:
+  db2xmeta:
+    image: 921992833788.dkr.ecr.us-west-2.amazonaws.com/db2xmeta:8.23
+    ports:
+      - "50000:50000"
+      - "55000:55000"
+    privileged: true
+    hostname: is-xmetadocker
+    extra_hosts:
+      - "is-servicesdocker:172.18.0.3"
+      
+  is-servicesdocker:
+    image: 921992833788.dkr.ecr.us-west-2.amazonaws.com/services:8.23
+    ports:
+      - "9443:9443"
+      - "9446:9446"
+    privileged: true
+    hostname: is-servicesdocker
+    extra_hosts:
+      - "is-xmetadocker:172.18.0.2"
+      - "is-en-conductor-0.en-cond:172.18.0.4"
+      - "is-compute-1:172.18.0.5"
+    ulimits:
+      nofile:
+        soft: 10240
+        hard: 10240
+    depends_on:
+      - db2xmeta
+      
+  conductor:
+    image: 921992833788.dkr.ecr.us-west-2.amazonaws.com/engine:8.23.1.1
+    ports:
+      - "10000-10200:10000-10200"
+      - "11000-11200:11000-11200"
+      - "13400-13401:13400-13401"
+      - "30000-30010:30000-30010"
+      - "31531:31531"
+      - "31538:31538"
+    privileged: true
+    hostname: is-en-conductor-0.en-cond
+    volumes:
+      - /data0:/data0
+    depends_on:
+      - is-servicesdocker
+    extra_hosts:
+      - "is-servicesdocker:172.18.0.3"
+      - "is-compute-1:172.18.0.5"
+      
+  compute:
+    image: 921992833788.dkr.ecr.us-west-2.amazonaws.com/compute:8.23.2.1
+    ports:
+      - "10000-10999:10000-10999"
+      - "11000-11999:11000-11999"
+      - "13400-13401:13400-13401"
+      - "30000-30010:30000-30010"
+      - "31531:31531"
+      - "31538:31538"
+      - "544:544"
+    privileged: true
+    hostname: is-compute-1
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - /data0:/data0
+    depends_on:
+      - "is-en-conductor-0.en-cond:172.18.0.4"
