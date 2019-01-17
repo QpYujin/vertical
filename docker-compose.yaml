@@ -36,7 +36,7 @@ services:
     entrypoint: 
       - sh
       - -c 
-      - './wait-for-it/wait-for-it.sh -t 600 db2xmeta:50000 -- /opt/IBM/InformationServer/initScripts/startcontainer.sh'
+      - './wait-for-it/wait-for-it.sh -t 900 db2xmeta:50000 -- /opt/IBM/InformationServer/initScripts/startcontainer.sh'
     logging:
       driver: "awslogs"
       options:
