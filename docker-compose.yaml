@@ -17,7 +17,7 @@ services:
         awslogs-stream: "vertical-db2xmeta"
       
   is-servicesdocker:
-    image: 921992833788.dkr.ecr.us-west-2.amazonaws.com/services:8.23
+    image: 921992833788.dkr.ecr.us-west-2.amazonaws.com/services:9.1
     ports:
       - "9443:9443"
       - "9446:9446"
@@ -33,6 +33,10 @@ services:
         hard: 10240
     depends_on:
       - db2xmeta
+    entrypoint: 
+      - sh
+      - -c 
+      - './wait-for-it/wait-for-it.sh -t 600 db2xmeta:50000 -- /opt/IBM/InformationServer/initScripts/startcontainer.sh'
     logging:
       driver: "awslogs"
       options:
@@ -41,7 +45,7 @@ services:
         awslogs-stream: "vertical-services"
       
   conductor:
-    image: 921992833788.dkr.ecr.us-west-2.amazonaws.com/engine:8.23.1.1
+    image: 921992833788.dkr.ecr.us-west-2.amazonaws.com/engine:9.2.1
     ports:
       - "10000-10200:10000-10200"
       - "11000-11200:11000-11200"
@@ -66,7 +70,7 @@ services:
         awslogs-stream: "vertical-engine"
       
   compute:
-    image: 921992833788.dkr.ecr.us-west-2.amazonaws.com/compute:8.23.2.1
+    image: 921992833788.dkr.ecr.us-west-2.amazonaws.com/compute:9.2.1
     privileged: true
     hostname: is-compute-1
     volumes:
