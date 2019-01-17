@@ -9,6 +9,12 @@ services:
     hostname: is-xmetadocker
     extra_hosts:
       - "is-servicesdocker:172.18.0.3"
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "us-east-1"
+        awslogs-group: "cloudoptim"
+        awslogs-stream: "vertical-db2xmeta"
       
   is-servicesdocker:
     image: 921992833788.dkr.ecr.us-west-2.amazonaws.com/services:8.23
@@ -27,6 +33,12 @@ services:
         hard: 10240
     depends_on:
       - db2xmeta
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "us-east-1"
+        awslogs-group: "cloudoptim"
+        awslogs-stream: "vertical-services"
       
   conductor:
     image: 921992833788.dkr.ecr.us-west-2.amazonaws.com/engine:8.23.1.1
@@ -46,6 +58,12 @@ services:
     extra_hosts:
       - "is-servicesdocker:172.18.0.3"
       - "is-compute-1:172.18.0.5"
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "us-east-1"
+        awslogs-group: "cloudoptim"
+        awslogs-stream: "vertical-engine"
       
   compute:
     image: 921992833788.dkr.ecr.us-west-2.amazonaws.com/compute:8.23.2.1
@@ -58,3 +76,9 @@ services:
       - "is-en-conductor-0.en-cond:172.18.0.4"
     depends_on:
       - conductor
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "us-east-1"
+        awslogs-group: "cloudoptim"
+        awslogs-stream: "vertical-compute"
