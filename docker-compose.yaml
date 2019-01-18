@@ -45,7 +45,7 @@ services:
         awslogs-stream: "vertical-services"
       
   conductor:
-    image: 921992833788.dkr.ecr.us-west-2.amazonaws.com/engine:9.2.1
+    image: 921992833788.dkr.ecr.us-west-2.amazonaws.com/engine:9.1.1
     ports:
       - "10000-10200:10000-10200"
       - "11000-11200:11000-11200"
